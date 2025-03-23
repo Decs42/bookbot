@@ -1,32 +1,38 @@
-def get_book_text_count(text):
+def get_book_text(path_to_file: str):
+    with open(path_to_file) as f:
+        file_contents = f.read()
+
+    return file_contents
+
+
+def get_book_text_count(text: str):
     split_text = text.split()
-    return f"{len(split_text)} words found in the document"
+    return len(split_text)
 
 
-def get_char_counts(text):
+def get_char_counts(text: str):
     char_dict = {}
 
-    for word in text:
-        for char in word:
-            lowercase_char = char.lower()
-            if lowercase_char not in char_dict:
-                char_dict[lowercase_char] = 1
-            else:
-                char_dict[lowercase_char] += 1
+    text = text.lower()
+
+    for char in text:
+        if char not in char_dict:
+            char_dict[char] = 1
+        else:
+            char_dict[char] += 1
 
     return char_dict
 
 
-def generate_book_report(char_dict, text):
-    new_list = []
-    split_text = text.split()
+def sorting_func(dict: dict):
+    return dict["count"]
 
-    def sorting_func(dict):
-        return dict["count"]
+
+def generate_book_report(char_dict: dict, words_count: int, book_path: str):
+    new_list = []
 
     for char in char_dict:
         if char.isalpha():
-            print(char)
             count = char_dict[char]
             list_dict = {"char": char, "count": count}
             new_list.append(list_dict)
@@ -34,9 +40,9 @@ def generate_book_report(char_dict, text):
     new_list.sort(reverse=True, key=sorting_func)
 
     print("============ BOOKBOT ============")
-    print("Analyzing book found at books/frankenstein.txt...")
+    print(f"Analyzing book found at {book_path}")
     print("----------- Word Count ----------")
-    print(f"Found {len(split_text)} total words")
+    print(f"Found {words_count} total words")
     print("--------- Character Count -------")
     for item in new_list:
         print(f"{item["char"]}: {item["count"]}")
